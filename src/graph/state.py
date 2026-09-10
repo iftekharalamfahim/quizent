@@ -57,7 +57,7 @@ class QuizResult:
         return self.score >= 0.5
 
 # define the AgentState TypedDict that LangGraph manages 
-class AgentState(TypeDict):
+class AgentState(TypedDict):
     """
     The shared state for the Learning Accelerator graph.
 
@@ -81,7 +81,7 @@ class AgentState(TypeDict):
 
 # three utility functions for agent nodes to read from state safely
 
-def initial_state:
+def initial_state(
     goal: str,
     session_id: str,
     study_materials_path: str = "study_materials/sample_notes",

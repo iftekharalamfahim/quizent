@@ -56,7 +56,7 @@ def memory_delete(session_id: str, key:str) -> str:
     session = _store.get(session_id, {})
     if key in session:
         del session[key]
-        return f"Deleted '{key}' from session '{session_id'"
+        return f"Deleted '{key}' from session '{session_id}'"
     return f"Key '{key}' not found in session '{session}'"
 
 @mcp.resource("notes://session/{session_id}")

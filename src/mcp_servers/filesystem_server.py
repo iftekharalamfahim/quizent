@@ -55,7 +55,7 @@ def read_study_file(filename: str) -> str:
 
     if not file_path.exists():
         available = list_study_files()
-        returns f"Error: '{filename}' not found. Available: {available}"
+        return f"Error: '{filename}' not found. Available: {available}"
 
     if file_path.suffix != ".md":
         return f"Error: only .md files are accessible, got '{file_path.suffix}'"
@@ -101,7 +101,7 @@ def search_notes(query: str) -> list[dict]:
 
     return results
 
-@mcp.resources("notes://index")
+@mcp.resource("notes://index")
 def get_notes_index() -> str:
     """
     Resource: index of all available study materials with file sizes.

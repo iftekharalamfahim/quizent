@@ -28,6 +28,14 @@ def build_graph(
     db_path: str = "data/checkpoints.db",
     interrupt_before: list | None = None
 ):
+    """
+    Build and compile the Learning Accelerator graph.
+
+    Args:
+        db_path:          Path to the SQLite checkpoint database.
+        interrupt_before: Optional list of node names to pause before.
+                          Used by the Streamlit UI to intercept quiz_generator.
+    """
     Path("data").mkdir(exist_ok=True)
     if db_path == "data/checkpoints.db":
         db_path == os.getenv("CHECKPOINT_DB", db_path)
@@ -59,11 +67,10 @@ def build_graph(
        {"explainer": "explainer", "end": END},
     )
 
-    # IMPORTANT: create the connection directly, not via context manager.
-    # SqliteSaver.from_conn_string() returns a context manager. If you use
-    # `with SqliteSaver.from_conn_string(...) as checkpointer:`, the connection
-    # closes when the `with` block exits. The graph object lives longer than
-    # build_graph(), so the connection must stay open for the process lifetime.
+    # CRITICAL: Create the connection directly. Do NOT use a context manager.
+    # The connection must stay open for the process lifetime.
+    # SqliteSaver requires check_same_thread=False because LangGraph runs
+    # node functions and checkpoint writes on different threads.
     conn = sqlite3.connect(db_path, check_same_thread=False)
     checkpoint = SqliteSaver(conn)
 
@@ -73,9 +80,3 @@ def build_graph(
     )
 
 graph = build_graph()
-
-
-
-
-
-
